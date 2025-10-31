@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataFlow - Stop Wasting Hours on Manual Data Entry</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            line-height: 1.7;
+            color: #475569;
+            background: #FFFFFF;
+            font-weight: 400;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        /* Header */
+        header {
+            padding: 32px 0;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1E3A8A;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 100px 0 80px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.1;
+            color: #1E293B;
+            margin-bottom: 32px;
+            letter-spacing: -0.02em;
+        }
+        
+        .hero .subheadline {
+            font-size: 21px;
+            color: #64748B;
+            margin-bottom: 48px;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+        
+        .hero .building-note {
+            display: inline-block;
+            background: #DBEAFE;
+            color: #1E3A8A;
+            padding: 8px 16px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 32px;
+        }
+        
+        /* CTA Buttons */
+        .cta-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .btn-primary {
+            display: inline-block;
+            background: #1E3A8A;
+            color: #FFFFFF;
+            padding: 18px 36px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 17px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .btn-primary:hover {
+            background: #1e40af;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 16px rgba(30, 58, 138, 0.25);
+        }
+        
+        .btn-secondary {
+            display: inline-block;
+            background: transparent;
+            color: #1E3A8A;
+            padding: 18px 36px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 17px;
+            border: 2px solid #1E3A8A;
+            transition: all 0.2s;
+            cursor: pointer;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .btn-secondary:hover {
+            background: #DBEAFE;
+        }
+        
+        .text-link {
+            color: #06B6D4;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .text-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Form */
+        .form-container {
+            display: none;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 4px;
+            padding: 48px;
+            margin: 64px auto;
+            max-width: 600px;
+        }
+        
+        .form-container.active {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .form-container h3 {
+            font-size: 28px;
+            margin-bottom: 12px;
+            color: #1E293B;
+            font-weight: 700;
+        }
+        
+        .form-container p {
+            color: #64748B;
+            margin-bottom: 32px;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 28px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #1E293B;
+            font-size: 15px;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #CBD5E1;
+            border-radius: 4px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            color: #1E293B;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border: 2px solid #06B6D4;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            font-weight: 400;
+            cursor: pointer;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 400;
+        }
+        
+        .radio-group input[type="radio"] {
+            width: auto;
+            margin-right: 8px;
+        }
+        
+        /* Story Section */
+        .story {
+            background: #F8FAFC;
+            padding: 80px 0;
+        }
+        
+        .story h2 {
+            font-size: 40px;
+            margin-bottom: 32px;
+            color: #1E293B;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .story p {
+            font-size: 18px;
+            color: #64748B;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 0;
+        }
+        
+        .how-it-works h2 {
+            font-size: 40px;
+            margin-bottom: 56px;
+            text-align: center;
+            color: #1E293B;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 48px;
+            margin-bottom: 56px;
+        }
+        
+        .step {
+            text-align: center;
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: #DBEAFE;
+            color: #1E3A8A;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .step h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #1E293B;
+            font-weight: 600;
+        }
+        
+        .step p {
+            color: #64748B;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+        
+        .diagram {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 4px;
+            padding: 56px 40px;
+            text-align: center;
+            font-size: 20px;
+            color: #64748B;
+            margin-bottom: 32px;
+        }
+        
+        .diagram-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .arrow {
+            color: #06B6D4;
+            font-size: 32px;
+        }
+        
+        /* Help Build Section */
+        .help-build {
+            background: #DBEAFE;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .help-build h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: #1E293B;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .help-build p {
+            font-size: 18px;
+            color: #64748B;
+            margin-bottom: 48px;
+            font-weight: 400;
+        }
+        
+        .help-build .stats {
+            display: flex;
+            justify-content: center;
+            gap: 64px;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1E3A8A;
+        }
+        
+        .stat-label {
+            color: #475569;
+            font-size: 14px;
+        }
+        
+        /* Benefits */
+        .benefits {
+            padding: 80px 0;
+        }
+        
+        .benefits h2 {
+            font-size: 40px;
+            margin-bottom: 48px;
+            text-align: center;
+            color: #1E293B;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .benefit-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+        }
+        
+        .benefit-item {
+            padding: 32px;
+            background: #F8FAFC;
+            border-radius: 4px;
+            border-left: 3px solid #06B6D4;
+        }
+        
+        .benefit-item h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #1E293B;
+            font-weight: 600;
+        }
+        
+        .benefit-item p {
+            color: #64748B;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+        
+        /* Footer CTA */
+        .footer-cta {
+            background: #1E3A8A;
+            color: #FFFFFF;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .footer-cta h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .footer-cta p {
+            font-size: 18px;
+            margin-bottom: 48px;
+            opacity: 0.85;
+            font-weight: 400;
+        }
+        
+        .footer-cta .btn-primary {
+            background: #FFFFFF;
+            color: #1E3A8A;
+        }
+        
+        .footer-cta .btn-primary:hover {
+            background: #F8FAFC;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 32px 0;
+            text-align: center;
+            color: #94A3B8;
+            font-size: 14px;
+            border-top: 1px solid #E2E8F0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero .subheadline {
+                font-size: 18px;
+            }
+            
+            .steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .benefit-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .diagram-text {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">DataFlow</div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="building-note">🚧 Currently Building - Help Shape This Product</div>
+            <h1>Stop Wasting Hours Typing Data From Documents</h1>
+            <p class="subheadline">I'm building software to automate document data entry. Help shape what gets built by sharing your specific needs.</p>
+            
+            <div class="cta-group">
+                <button class="btn-primary" onclick="showForm()">Share Your Document Challenges</button>
+                <a href="https://calendly.com/iorsasesesugh/30min" class="btn-secondary" target="_blank">Book a 15-Minute Discovery Call</a>
+            </div>
+            <p style="margin-top: 8px;"><a href="#email-only" class="text-link">Just keep me updated via email →</a></p>
+            
+            <div id="challengeForm" class="form-container">
+                <h3>Help Shape DataFlow</h3>
+                <p>I'm talking to people dealing with manual data entry to understand the problem deeply before building. Your input will directly influence what gets built.</p>
+                
+                <form id="mainForm" action="https://formspree.io/f/mrboyjwk" method="POST">
+                    <div class="form-group">
+                        <label for="email">Your Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="company">Company / Industry *</label>
+                        <input type="text" id="company" name="company" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>What documents do you process? (Check all that apply)</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="documents" value="invoices"> Invoices</label>
+                            <label><input type="checkbox" name="documents" value="receipts"> Receipts</label>
+                            <label><input type="checkbox" name="documents" value="forms"> Forms / Applications</label>
+                            <label><input type="checkbox" name="documents" value="statements"> Bank Statements</label>
+                            <label><input type="checkbox" name="documents" value="contracts"> Contracts / Legal Docs</label>
+                            <label><input type="checkbox" name="documents" value="other"> Other</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>How many documents per month? *</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="volume" value="0-100" required> 0-100</label>
+                            <label><input type="radio" name="volume" value="100-1000"> 100-1,000</label>
+                            <label><input type="radio" name="volume" value="1000-10000"> 1,000-10,000</label>
+                            <label><input type="radio" name="volume" value="10000+"> 10,000+</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="frustration">What's your biggest frustration with your current process? *</label>
+                        <textarea id="frustration" name="frustration" required placeholder="E.g., Takes too long, too many errors, difficult to find data entry staff..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Would you consider trying DataFlow when ready? *</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="interest" value="definitely" required> Definitely</label>
+                            <label><input type="radio" name="interest" value="maybe"> Maybe</label>
+                            <label><input type="radio" name="interest" value="curious"> Just curious</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="beta" value="yes"> I'm interested in being a beta tester</label>
+                            <label><input type="checkbox" name="call" value="yes"> I'd like to schedule a follow-up call</label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="story">
+        <div class="container">
+            <h2>Why I'm Building This</h2>
+            <p>During my internship at a bank, I watched talented professionals spend entire weeks manually typing data from scanned documents into spreadsheets.</p>
+            <p>Line by line. Number by number. Hour after hour.</p>
+            <p>In 2025, with AI everywhere, this seemed absurd. So I decided to build a solution—but I want to build it right, for real people with real problems.</p>
+            <p><strong>That's where you come in.</strong> I'm talking to 20 companies before writing a single line of code to ensure DataFlow solves your actual needs, not what I think you need.</p>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2>What I'm Building</h2>
+            
+            <div class="diagram">
+                <div class="diagram-text">
+                    <span>📄 Upload Document</span>
+                    <span class="arrow">→</span>
+                    <span>🤖 Auto Extract Data</span>
+                    <span class="arrow">→</span>
+                    <span>📊 Export Anywhere</span>
+                </div>
+            </div>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Upload</h3>
+                    <p>Drag and drop any document—PDF, image, scan. No formatting required.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Extract</h3>
+                    <p>Automated extraction turns your document into structured data in seconds.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Export</h3>
+                    <p>Download as Excel, send to your database, or integrate with your tools.</p>
+                </div>
+            </div>
+            
+            <p style="text-align: center; color: #475569; font-size: 18px; margin-bottom: 24px;">
+                <strong>Does this solve your problem?</strong> Let me know what's missing or what you'd change.
+            </p>
+        </div>
+    </section>
+
+    <section class="help-build">
+        <div class="container">
+            <h2>Help Me Build It Right</h2>
+            <p>I'm committed to building in public and involving real users from day one.</p>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">20+</div>
+                    <div class="stat-label">Discovery calls planned</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">8-10</div>
+                    <div class="stat-label">Weeks to launch</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">50%</div>
+                    <div class="stat-label">Off for founding members</div>
+                </div>
+            </div>
+            
+            <div class="cta-group">
+                <button class="btn-primary" onclick="showForm()">Share Your Needs</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="benefits">
+        <div class="container">
+            <h2>What You Get for Helping</h2>
+            <div class="benefit-list">
+                <div class="benefit-item">
+                    <h3>🎯 Built For You</h3>
+                    <p>Your feedback directly shapes what features get built first.</p>
+                </div>
+                <div class="benefit-item">
+                    <h3>🚀 First Access</h3>
+                    <p>Be among the first to use DataFlow when it launches.</p>
+                </div>
+                <div class="benefit-item">
+                    <h3>💰 Founding Pricing</h3>
+                    <p>Lock in 50% off forever as a founding member.</p>
+                </div>
+                <div class="benefit-item">
+                    <h3>🤝 Direct Line</h3>
+                    <p>Priority support and direct access to the founder (me).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="footer-cta">
+        <div class="container">
+            <h2>Ready to Eliminate Data Entry?</h2>
+            <p>Let's talk about your specific document processing challenges.</p>
+            <div class="cta-group">
+                <button class="btn-primary" onclick="showForm()">Share Your Challenges</button>
+                <a href="https://calendly.com/iorsasesesugh/30min" class="btn-primary" target="_blank" style="color:white; background: transparent; border: 2px solid #FFFFFF;">Book Discovery Call</a>
+            </div>
+            <p id="email-only" style="margin-top: 24px; font-size: 16px;">
+                Or just get updates: 
+                <a href="#" class="text-link" style="color: #CFFAFE;" onclick="event.preventDefault(); document.getElementById('emailOnlyForm').style.display='block'; this.style.display='none';">Enter your email →</a>
+            </p>
+            <div id="emailOnlyForm" style="display: none; margin-top: 16px; max-width: 400px; margin-left: auto; margin-right: auto;">
+                <form action="https://formspree.io/f/xgvpnqvg" method="POST" style="display: flex; gap: 8px;">
+                    <input type="email" name="email" placeholder="your@email.com" required style="flex: 1; padding: 12px; border-radius: 6px; border: none;">
+                    <button type="submit" style="padding: 12px 24px; background: #06B6D4; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 DataFlow. Building in public. Questions? Reach out: your@email.com</p>
+        </div>
+    </footer>
+
+    <script>
+        function showForm() {
+            const form = document.getElementById('challengeForm');
+            form.classList.add('active');
+            form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        // Form submission tracking (optional - add your analytics)
+        document.getElementById('mainForm').addEventListener('submit', function(e) {
+            // Add analytics tracking here if needed
+            // e.g., gtag('event', 'form_submit', { form_name: 'challenge_form' });
+        });
+    </script>
+</body>
+</html>
